@@ -16,9 +16,14 @@ uniform fs_uniforms {
 
 // hash to pseudo-random gradient direction
 vec2 grad2(vec2 p) {
-    float x = fract(dot(p, vec2(127.1, 311.7)));
-    float y = fract(dot(p, vec2(269.5, 183.3)));
-    return normalize(vec2(x, y) * 2.0 - 1.0);
+    // Calculate the dot products
+    vec2 q = vec2(
+        dot(p, vec2(127.1, 311.7)),
+        dot(p, vec2(269.5, 183.3))
+    );
+
+    // Apply sine and a large multiplier to scramble the linearity
+    return normalize(-1.0 + 2.0 * fract(sin(q) * 43758.5453123));
 }
 
 // smooth gradient noise
