@@ -1,0 +1,22 @@
+local MSG_TRIGGER = hash("trigger_response")
+local MSG_REMOVE_MARBLE = hash("marble_remove")
+local MSG_COMPLETE = hash("complete")
+
+go.property("spawner_url", msg.url())
+
+function init(self)
+	timer.delay(8, false, function() go.delete() end)
+end
+
+function final(self)
+	msg.post(self.spawner_url,MSG_REMOVE_MARBLE, {id=go.get_id()})
+end
+
+function on_message(self, message_id, message, sender)
+
+	if (message_id==MSG_TRIGGER) then
+		msg.post(msg.url("/gui#gui"),MSG_COMPLETE)
+		go.delete()
+		pprint("complete")
+	end
+end

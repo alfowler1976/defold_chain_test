@@ -1,0 +1,42 @@
+script: "/assets/gui/gui.gui_script"
+textures {
+  name: "gui"
+  texture: "/assets/gui/gui.atlas"
+}
+nodes {
+  position {
+    x: 85.0
+    y: 79.0
+  }
+  rotation {
+    z: 90.0
+  }
+  scale {
+    x: 1.5
+    y: 2.0
+  }
+  size {
+    x: 241.0
+    y: 19.0
+  }
+  type: TYPE_BOX
+  texture: "gui/bar"
+  id: "bar"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_BOTTOM
+  pivot: PIVOT_SW
+  inherit_alpha: true
+  slice9 {
+    x: 4.0
+    y: 4.0
+    z: 4.0
+    w: 4.0
+  }
+  material: "gui_tint"
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT
+materials {
+  name: "gui_tint"
+  material: "/assets/material/gui_tint.material"
+}

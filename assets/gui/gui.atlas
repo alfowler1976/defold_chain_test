@@ -1,0 +1,4 @@
+images {
+  image: "/assets/images/bar.png"
+}
+extrude_borders: 2

@@ -1,0 +1,7 @@
+images {
+  image: "/assets/images/bucket_back.png"
+}
+images {
+  image: "/assets/images/bucket_front.png"
+}
+extrude_borders: 2

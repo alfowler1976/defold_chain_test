@@ -1,0 +1,17 @@
+local MSG_CONTACT = hash("contact_point_response")
+local MSG_PLAYSOUND = hash("SM_play")
+local MSG_TRIGGER = hash("trigger_response")
+
+function init(self)
+	self.main_url = msg.url("/controller#main")
+	self.sfx_message = { url = msg.url("/sfx#metal") }
+end
+
+function on_message(self, message_id, message, sender)
+
+	if (message_id==MSG_CONTACT) then
+		msg.post(self.main_url,MSG_PLAYSOUND,self.sfx_message)
+	elseif (message_id==MSG_TRIGGER) then
+		msg.post(self.main_url,MSG_PLAYSOUND,self.sfx_message)
+	end
+end

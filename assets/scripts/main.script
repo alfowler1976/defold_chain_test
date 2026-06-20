@@ -1,0 +1,118 @@
+
+local MSG_REMOVE_MARBLE = hash("marble_remove")
+local MSG_PLAYSOUND = hash("SM_play")
+
+local pipe = require("pipes")
+local sound_manager = require("sound_manager")
+
+go.property("segments_per_curve", 10)
+
+local function spawn_marbles(self, handle, time_elapsed)
+	if #pipe.user_points > 0 then
+		local ball_id = factory.create("#marble_factory", pipe.user_points[#pipe.user_points],nil,self.spawn)
+		table.insert(self.marbles,ball_id)
+	end
+end
+
+function init(self)
+
+	msg.post(".", "acquire_input_focus")
+
+	-- get b2d body
+	local collision_url = msg.url(nil,"terrain","collisionobject")
+	self.body = b2d.get_body(collision_url)
+
+	-- get mesh url
+	self.mesh_url = msg.url("/terrain#mesh")
+
+	-- set up factory create table
+	self.spawn = { spawner_url = msg.url(".")}
+
+	-- generate pipe
+	pipe.generate_pipe(self.body,self.mesh_url)
+
+	
+	self.marbles = {}
+
+	-- spawn marbles
+	timer.delay(0.5, true, spawn_marbles)
+end
+
+local function remove_all(self)
+
+	-- remove all active marbles
+	if (#self.marbles>0) then
+		for i, id in ipairs(self.marbles) do
+			if go.exists(id) then
+				go.delete(id)
+			end
+		end
+	end
+
+	self.marbles = {}
+end
+
+function update(self, dt)
+
+	-- update soundmanager
+	sound_manager.updatetimer(dt)
+	
+	-- draw visual debug crosshairs so we know exactly where the grab-points are
+	for i, pt in ipairs(pipe.user_points) do
+		-- Red if grabbed, Green if idle
+		if (i>1 and i<#pipe.user_points) then
+			local color = (i == self.dragged_point_index) and vmath.vector4(1, 0, 0, 1) or vmath.vector4(0, 1, 0, 1)
+
+			msg.post("@render:", "draw_line", { start_point = pt + vmath.vector3(-20,0,0), end_point = pt + vmath.vector3(20,0,0), color = color })
+			msg.post("@render:", "draw_line", { start_point = pt + vmath.vector3(0,-20,0), end_point = pt + vmath.vector3(0,20,0), color = color })
+		end		
+	end
+end
+
+function on_message(self, message_id, message, sender)
+
+	-- if marble removed message remove from table
+	if (message_id==MSG_REMOVE_MARBLE) then
+		if (#self.marbles>0) then
+			for i, id in ipairs(self.marbles) do
+				if id == message.id then
+					table.remove(self.marbles, i)
+					return
+				end
+			end
+		end
+	elseif (message_id== MSG_PLAYSOUND) then
+		sound_manager.play_sound(message.url)
+	end
+end
+	
+
+function on_input(self, action_id, action)
+
+	if action_id == hash("touch") or not action_id then
+		if not action.x or not action.y then return end
+		local touch_pos = camera.screen_to_world(vmath.vector3(action.screen_x, action.screen_y,0))
+
+		if action_id == hash("touch") then
+			if action.pressed then
+				for i, pt in ipairs(pipe.user_points) do
+					if vmath.length(pt - touch_pos) < 50 and i<#pipe.user_points and i>1 then
+						self.dragged_point_index = i
+						break 
+					end
+				end
+			elseif action.released then
+				self.dragged_point_index = nil
+				-- remove all active marbles
+				remove_all(self)
+				-- generate the Box2D shape when released
+				pipe.generate_pipe(self.body,self.mesh_url)
+			end
+		end
+
+		if self.dragged_point_index then
+			pipe.user_points[self.dragged_point_index].x = touch_pos.x
+			pipe.user_points[self.dragged_point_index].y = touch_pos.y
+		end
+	end
+end

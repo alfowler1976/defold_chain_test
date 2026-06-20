@@ -1,0 +1,179 @@
+name: "main"
+instances {
+  id: "ground"
+  prototype: "/assets/go/ground/ground.go"
+  position {
+    x: 67.38093
+    y: -473.7864
+    z: -0.7
+  }
+  scale3 {
+    x: 2.5
+  }
+}
+instances {
+  id: "bucket"
+  prototype: "/assets/go/bucket/bucket.go"
+  position {
+    x: -459.87558
+    y: -341.88477
+  }
+}
+instances {
+  id: "broom1"
+  prototype: "/assets/go/broom/broom.go"
+  position {
+    x: 570.52405
+    y: -168.51764
+  }
+  scale3 {
+    x: 1.7
+    y: 1.7
+  }
+}
+instances {
+  id: "broom"
+  prototype: "/assets/go/broom/broom.go"
+  position {
+    x: -153.47595
+    y: -173.51764
+  }
+  scale3 {
+    x: 1.7
+    y: 1.7
+  }
+}
+scale_along_z: 0
+embedded_instances {
+  id: "terrain"
+  data: "embedded_components {\n"
+  "  id: \"collisionobject\"\n"
+  "  type: \"collisionobject\"\n"
+  "  data: \"type: COLLISION_OBJECT_TYPE_STATIC\\n"
+  "mass: 0.0\\n"
+  "friction: 0.1\\n"
+  "restitution: 0.5\\n"
+  "group: \\\"default\\\"\\n"
+  "mask: \\\"default\\\"\\n"
+  "mask: \\\"marble\\\"\\n"
+  "embedded_collision_shape {\\n"
+  "  shapes {\\n"
+  "    shape_type: TYPE_BOX\\n"
+  "    position {\\n"
+  "      x: 79.0\\n"
+  "      y: -437.0\\n"
+  "    }\\n"
+  "    rotation {\\n"
+  "    }\\n"
+  "    index: 0\\n"
+  "    count: 3\\n"
+  "  }\\n"
+  "  data: 950.0\\n"
+  "  data: 20.0\\n"
+  "  data: 10.0\\n"
+  "}\\n"
+  "\"\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"mesh\"\n"
+  "  type: \"mesh\"\n"
+  "  data: \"material: \\\"/assets/material/model_simple.material\\\"\\n"
+  "vertices: \\\"/assets/mesh/empty.buffer\\\"\\n"
+  "textures: \\\"/assets/images/pipe.png\\\"\\n"
+  "\"\n"
+  "  position {\n"
+  "    z: -0.1\n"
+  "  }\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"label\"\n"
+  "  type: \"label\"\n"
+  "  data: \"size {\\n"
+  "  x: 128.0\\n"
+  "  y: 32.0\\n"
+  "}\\n"
+  "pivot: PIVOT_NW\\n"
+  "text: \\\"Instructions:\\\\n"
+  "\\\"\\n"
+  "  \\\"Drag the cross-hairs to change the \\\\n"
+  "\\\"\\n"
+  "  \\\"shape the pipe\\\"\\n"
+  "font: \\\"/builtins/fonts/default.font\\\"\\n"
+  "material: \\\"/builtins/fonts/label-df.material\\\"\\n"
+  "\"\n"
+  "  position {\n"
+  "    x: -801.0\n"
+  "    y: 752.0\n"
+  "  }\n"
+  "  scale {\n"
+  "    x: 3.0\n"
+  "    y: 3.0\n"
+  "  }\n"
+  "}\n"
+  ""
+}
+embedded_instances {
+  id: "camera"
+  data: "embedded_components {\n"
+  "  id: \"camera\"\n"
+  "  type: \"camera\"\n"
+  "  data: \"aspect_ratio: 1.0\\n"
+  "fov: 0.7854\\n"
+  "near_z: -1.0\\n"
+  "far_z: 1.0\\n"
+  "orthographic_projection: 1\\n"
+  "orthographic_zoom: 0.5\\n"
+  "\"\n"
+  "}\n"
+  ""
+  position {
+    x: 99.0
+    y: 164.0
+  }
+}
+embedded_instances {
+  id: "controller"
+  data: "components {\n"
+  "  id: \"main\"\n"
+  "  component: \"/assets/scripts/main.script\"\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"marble_factory\"\n"
+  "  type: \"factory\"\n"
+  "  data: \"prototype: \\\"/assets/go/marble/marble.go\\\"\\n"
+  "\"\n"
+  "}\n"
+  ""
+}
+embedded_instances {
+  id: "sfx"
+  data: "embedded_components {\n"
+  "  id: \"wood\"\n"
+  "  type: \"sound\"\n"
+  "  data: \"sound: \\\"/assets/sfx/wood.ogg\\\"\\n"
+  "\"\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"metal\"\n"
+  "  type: \"sound\"\n"
+  "  data: \"sound: \\\"/assets/sfx/metal.ogg\\\"\\n"
+  "\"\n"
+  "}\n"
+  ""
+}
+embedded_instances {
+  id: "gui"
+  data: "components {\n"
+  "  id: \"gui\"\n"
+  "  component: \"/assets/gui/gui.gui\"\n"
+  "}\n"
+  ""
+}
+embedded_instances {
+  id: "object"
+  children: "broom"
+  children: "broom1"
+  children: "bucket"
+  children: "ground"
+  data: ""
+}

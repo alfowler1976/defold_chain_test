@@ -1,0 +1,35 @@
+[bootstrap]
+main_collection = /main/main.collectionc
+
+[script]
+shared_state = 1
+
+[display]
+width = 960
+height = 640
+high_dpi = 1
+
+[android]
+input_method = HiddenInputField
+
+[physics]
+gravity_y = -1000.0
+scale = 0.01
+debug = 0
+use_fixed_timestep = 0
+max_collisions = 128
+max_contacts = 256
+
+[html5]
+scale_mode = stretch
+
+[project]
+title = rails
+
+[native_extension]
+app_manifest = /manifest.appmanifest
+
+[box2d]
+velocity_iterations = 7
+position_iterations = 7
+

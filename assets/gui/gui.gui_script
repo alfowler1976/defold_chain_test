@@ -1,0 +1,73 @@
+
+local MSG_COMPLETE = hash("complete")
+
+local COLOR1 = vmath.vector4(0.5,0,0,1)
+local COLOR2 = vmath.vector4(1,1,0,1)
+local COLOR3 = vmath.vector4(0.4,1,0.4,1)
+
+local UPARAM = vmath.vector4(1000,700,0,0)
+
+local TINT = hash("tint")
+local UPARAM = hash("u_params")
+
+
+function init(self)
+	self.timer = 0
+	self.value = 0
+	self.node = gui.get_node(hash("bar"))
+	self.scale = vmath.vector3(1.5,2.5,1)
+	self.u_param = vmath.vector4(1000,700,0,0)
+end
+
+
+function update(self, dt)
+
+	self.timer = self.timer + dt
+
+	-- decrease value	
+	self.value = self.value - dt/2.5
+
+	-- clip to 0
+	if (self.value<0) then
+		self.value = 0 
+	end
+
+	self.scale.x = 1.5 * self.value
+
+	
+	if (self.scale.x>1.5) then
+		self.scale.x = 1.5
+	end
+
+	-- set scale
+	gui.set_scale(self.node, self.scale)
+
+	-- set colour
+	if (self.value<=0) then
+		gui.set(self.node,TINT,COLOR1)
+	elseif (self.value>0 and self.value<0.5) then
+		gui.set(self.node,TINT,vmath.lerp(self.value*2,COLOR1, COLOR2))
+	elseif (self.value>0 and self.value<1) then
+		gui.set(self.node,TINT,vmath.lerp((self.value-0.5)*2,COLOR2, COLOR3))
+	else
+		gui.set(self.node,TINT,COLOR3)
+	end
+
+	-- set uparam
+	self.u_param.w = self.timer
+	gui.set(self.node,UPARAM,self.u_param)
+end
+
+function on_message(self, message_id, message, sender)
+
+	-- if marble in bucket then increase value
+	if (message_id == MSG_COMPLETE) then
+		self.value =  self.value+0.25
+
+		if (self.value>1.4) then
+			self.value = 1.4
+		end
+	end
+end
+
+
