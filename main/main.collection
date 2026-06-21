@@ -97,7 +97,7 @@ embedded_instances {
   "\\\"\\n"
   "  \\\"Drag the cross-hairs to change the \\\\n"
   "\\\"\\n"
-  "  \\\"shape the pipe\\\"\\n"
+  "  \\\"shape of the pipe\\\"\\n"
   "font: \\\"/builtins/fonts/default.font\\\"\\n"
   "material: \\\"/builtins/fonts/label-df.material\\\"\\n"
   "\"\n"
