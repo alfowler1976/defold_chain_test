@@ -5,6 +5,7 @@ local MSG_TRIGGER = hash("trigger_response")
 function init(self)
 	self.main_url = msg.url("/controller#main")
 	self.sfx_message = { url = msg.url("/sfx#metal") }
+	self.bucket_body =  b2d.get_body("#collisionobject")
 end
 
 function on_message(self, message_id, message, sender)
@@ -12,6 +13,19 @@ function on_message(self, message_id, message, sender)
 	if (message_id==MSG_CONTACT) then
 		msg.post(self.main_url,MSG_PLAYSOUND,self.sfx_message)
 	elseif (message_id==MSG_TRIGGER) then
+
+		-- play sound
 		msg.post(self.main_url,MSG_PLAYSOUND,self.sfx_message)
+
+		-- get joint
+		local joints = b2d.body.get_joints(self.bucket_body)
+		local length = b2d.joint.get_length(joints[1])
+
+		-- add to length
+		if (length<750) then
+			length = length +10
+			b2d.joint.set_length(joints[1], length)
+			b2d.joint.wake_bodies(joints[1])
+		end
 	end
 end

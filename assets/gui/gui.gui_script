@@ -24,16 +24,7 @@ function update(self, dt)
 
 	self.timer = self.timer + dt
 
-	-- decrease value	
-	self.value = self.value - dt/2.5
-
-	-- clip to 0
-	if (self.value<0) then
-		self.value = 0 
-	end
-
 	self.scale.x = 1.5 * self.value
-
 	
 	if (self.scale.x>1.5) then
 		self.scale.x = 1.5
@@ -62,10 +53,10 @@ function on_message(self, message_id, message, sender)
 
 	-- if marble in bucket then increase value
 	if (message_id == MSG_COMPLETE) then
-		self.value =  self.value+0.25
+		self.value =  self.value+(1/30)
 
-		if (self.value>1.4) then
-			self.value = 1.4
+		if (self.value>1.0) then
+			self.value = 1.0
 		end
 	end
 end

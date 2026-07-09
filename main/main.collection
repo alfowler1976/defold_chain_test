@@ -15,8 +15,8 @@ instances {
   id: "bucket"
   prototype: "/assets/go/bucket/bucket.go"
   position {
-    x: -459.87558
-    y: -341.88477
+    x: -460.0
+    y: 50.0
   }
 }
 instances {
@@ -42,6 +42,18 @@ instances {
     x: 1.7
     y: 1.7
   }
+}
+instances {
+  id: "weight"
+  prototype: "/assets/go/weight/weight.go"
+  position {
+    x: -460.0
+    y: 450.0
+  }
+}
+instances {
+  id: "rope"
+  prototype: "/assets/go/rope/rope.go"
 }
 scale_along_z: 0
 embedded_instances {
@@ -177,5 +189,6 @@ embedded_instances {
   children: "broom1"
   children: "bucket"
   children: "ground"
+  children: "weight"
   data: ""
 }

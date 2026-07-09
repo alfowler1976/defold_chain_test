@@ -25,13 +25,11 @@ function sound_manager.play_sound(hash_url)
 	local last_played = last_played_times[sound_key]
 	
 	if last_played and (sound_manager.timer - last_played) < THROTTLE_TIME then
-		pprint("sound dropped",hash_url)
 		return
 	end
 
 	-- concurrency limit
 	if active_sound_count >= MAX_CONCURRENT_SOUNDS then
-		pprint("too many sounds")
 		return
 	end
 

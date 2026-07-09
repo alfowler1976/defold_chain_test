@@ -36,6 +36,31 @@ function init(self)
 
 	-- spawn marbles
 	timer.delay(0.5, true, spawn_marbles)
+
+	local bucket_body =  b2d.get_body("/bucket#collisionobject")
+
+	local data = b2d.body.get_mass_data(bucket_body)
+	data.center.x = 0
+	b2d.body.set_mass_data(bucket_body,data)
+	
+	local weight_body  = b2d.get_body("/weight#collisionobject")
+
+	local joint = b2d.joint.create_distance(weight_body,bucket_body,
+	{  
+		local_anchor_a = vmath.vector3(0,0,0),
+		local_anchor_b = vmath.vector3(0,90,0),
+		length = 400,
+		enable_spring = true,
+		frequency = 2,
+		damping_ratio = 0.3,
+		min_length = 400,
+		max_length = 750,
+		enable_limit = true
+	})
+
+	self.weight_pos = go.get_position("/weight")
+	pprint(b2d.body.get_mass_data(bucket_body))
+	
 end
 
 local function remove_all(self)
@@ -50,6 +75,28 @@ local function remove_all(self)
 	end
 
 	self.marbles = {}
+end
+
+local function sprite_line(go_id, p1, p2, thickness)
+	thickness = thickness or 1
+
+	-- calculate the difference vector
+	local diff = p2 - p1
+
+	-- calculate the distance (which becomes the X scale)
+	local distance = vmath.length(diff)
+
+	-- calculate the midpoint 
+	local mid_point = p1 + (diff * 0.5)
+
+	-- calculate the rotation angle in radians around the Z-axis
+	local angle = math.atan2(diff.y, diff.x)
+	local rotation = vmath.quat_rotation_z(angle)
+
+	-- apply the transformations to the game object
+	go.set_position(mid_point, go_id)
+	go.set_rotation(rotation, go_id)
+	go.set_scale(vmath.vector3(distance/2, thickness, 1), go_id)
 end
 
 function update(self, dt)
@@ -67,6 +114,17 @@ function update(self, dt)
 			msg.post("@render:", "draw_line", { start_point = pt + vmath.vector3(0,-20,0), end_point = pt + vmath.vector3(0,20,0), color = color })
 		end		
 	end
+end
+
+function late_update(self, dt)
+
+	-- calc the world pos of the bucket handle
+	local world_transform = go.get_world_transform("/bucket")
+	local pos_v4 = vmath.vector4(0, 90, 0, 1.0)
+	local world_v4 = world_transform * pos_v4	
+	
+	-- adjust rope 
+	sprite_line(go.get_id("/rope"),self.weight_pos,vmath.vector3(world_v4.x, world_v4.y, world_v4.z))
 end
 
 function on_message(self, message_id, message, sender)
